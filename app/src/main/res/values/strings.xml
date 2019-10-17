@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SpaceX Monitor</string>
+    <string name="launches">Launches</string>
+    <string name="Charts">Charts</string>
 </resources>
