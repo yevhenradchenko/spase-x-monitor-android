@@ -2,8 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/launchesMenuItem"
+        android:icon="@drawable/ic_rocket"
         android:title="@string/launches" />
     <item
         android:id="@+id/chartsMenuItem"
+        android:icon="@drawable/ic_chart"
         android:title="@string/Charts" />
 </menu>
