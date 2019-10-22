@@ -1,10 +1,10 @@
 package com.spacexmonitor
 
-import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.*
 import java.io.IOException
@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     fun fetchJson() {
         println("Attempt fetch Json")
 
-        val url = "https://api.spacexdata.com/v3/launches/67"
+        val url = "https://api.spacexdata.com/v3/launches"
         val client = OkHttpClient()
         val request = Request.Builder().url(url).build()
 
@@ -35,7 +35,8 @@ class MainActivity : AppCompatActivity() {
 
                 val gson = GsonBuilder().create()
 
-                val spaceXFeed = gson.fromJson(body, SpaceXFeed::class.java)
+                val listType = object : TypeToken<List<SpaceXFeed>>() {}.type
+                val spaceXFeed = gson.fromJson<List<SpaceXFeed>>(body, listType)
             }
 
             override fun onFailure(call: Call, e: IOException) {
@@ -48,4 +49,4 @@ class MainActivity : AppCompatActivity() {
 
 class SpaceXFeed(val images: List<Images>)
 
-class Images(val id: Int, val name: String)
+class Images(val flight_number: Int, val name: String)
