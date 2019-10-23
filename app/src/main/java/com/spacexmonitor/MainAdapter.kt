@@ -19,8 +19,8 @@ class MainAdapter(val spaceXFeed: SpaceXFeed) : RecyclerView.Adapter<CustomViewH
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        val launchTitle = spaceXFeed.launches[position].toString()
-        holder.view.launchesTextTitle.text = launchTitle
+        val launch = spaceXFeed.launches[position]
+        holder.view.launchesTextTitle.text = launch.mission_name
     }
 }
 
