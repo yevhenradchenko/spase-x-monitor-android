@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         fetchJson()
 
         launchesRecyclerView.layoutManager = LinearLayoutManager(this)
-        launchesRecyclerView.adapter = MainAdapter()
+//        launchesRecyclerView.adapter = MainAdapter()
     }
 
     fun fetchJson() {
@@ -35,8 +35,13 @@ class MainActivity : AppCompatActivity() {
 
                 val gson = GsonBuilder().create()
 
-                val listType = object : TypeToken<List<SpaceXFeed>>() {}.type
-                val spaceXFeed = gson.fromJson<List<SpaceXFeed>>(body, listType)
+                val listType = object : TypeToken<List<Launches>>() {}.type
+                val spaceXFeed = gson.fromJson<List<Launches>>(body, listType)
+
+                runOnUiThread {
+                    launchesRecyclerView.adapter = MainAdapter(spaceXFeed)
+                }
+
             }
 
             override fun onFailure(call: Call, e: IOException) {
@@ -47,6 +52,16 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class SpaceXFeed(val images: List<Images>)
+class SpaceXFeed(val launches: List<Launches>)
 
-class Images(val flight_number: Int, val name: String)
+class Launches(
+    val flight_number: Int,
+    val mission_name: String,
+    val launch_year: Int,
+    val rocket: Rocket
+)
+
+class Rocket(
+    val rocket_name: String,
+    val rocket_type: String
+)

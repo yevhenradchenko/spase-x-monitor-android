@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.launch_row.view.*
 
-class MainAdapter : RecyclerView.Adapter<CustomViewHolder>() {
+class MainAdapter(val spaceXFeed: SpaceXFeed) : RecyclerView.Adapter<CustomViewHolder>() {
 
     val launchTitles = listOf<String>(
         "First title",
@@ -16,7 +16,7 @@ class MainAdapter : RecyclerView.Adapter<CustomViewHolder>() {
 
     //numberOfItems
     override fun getItemCount(): Int {
-        return launchTitles.size
+        return spaceXFeed.launches.count()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
