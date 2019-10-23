@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 val spaceXFeed = gson.fromJson<List<Launches>>(body, listType)
 
                 runOnUiThread {
-                    launchesRecyclerView.adapter = MainAdapter(spaceXFeed)
+                    launchesRecyclerView.adapter = MainAdapter(SpaceXFeed(spaceXFeed))
                 }
 
             }

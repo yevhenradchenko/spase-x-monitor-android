@@ -8,13 +8,6 @@ import kotlinx.android.synthetic.main.launch_row.view.*
 
 class MainAdapter(val spaceXFeed: SpaceXFeed) : RecyclerView.Adapter<CustomViewHolder>() {
 
-    val launchTitles = listOf<String>(
-        "First title",
-        "Second Title",
-        "Third Title",
-        "Fourth Title")
-
-    //numberOfItems
     override fun getItemCount(): Int {
         return spaceXFeed.launches.count()
     }
@@ -26,7 +19,7 @@ class MainAdapter(val spaceXFeed: SpaceXFeed) : RecyclerView.Adapter<CustomViewH
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        val launchTitle = launchTitles[position]
+        val launchTitle = spaceXFeed.launches[position].toString()
         holder.view.launchesTextTitle.text = launchTitle
     }
 }
