@@ -58,10 +58,12 @@ class Launches(
     val flight_number: Int,
     val mission_name: String,
     val launch_year: Int,
-    val rocket: Rocket
+    val rocket: Rocket,
+    val details: String
 )
 
 class Rocket(
     val rocket_name: String,
     val rocket_type: String
 )
+
