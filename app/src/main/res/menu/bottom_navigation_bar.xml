@@ -7,5 +7,5 @@
     <item
         android:id="@+id/chartsMenuItem"
         android:icon="@drawable/ic_chart"
-        android:title="@string/Charts" />
+        android:title="@string/charts" />
 </menu>

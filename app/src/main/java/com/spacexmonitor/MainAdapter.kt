@@ -32,7 +32,6 @@ class MainAdapter(val spaceXFeed: SpaceXFeed) : RecyclerView.Adapter<CustomViewH
         } else {
             holder.view.launchDetails.text = "Details: \n${launch.details}"
             holder.view.launchDetails.isVisible = true
-
         }
 
         if (launch.links.mission_patch == null) {
