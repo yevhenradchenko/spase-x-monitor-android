@@ -3,6 +3,7 @@ package com.spacexmonitor
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.launch_row.view.*
 
@@ -20,9 +21,17 @@ class MainAdapter(val spaceXFeed: SpaceXFeed) : RecyclerView.Adapter<CustomViewH
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         val launch = spaceXFeed.launches[position]
-        holder.view.launchesTextTitle.text = "Mission: ${launch.mission_name}"
-        holder.view.launchesTextYear.text = "Launch year: ${launch.launch_year}"
-        holder.view.launchesTextDetails.text = "Details: ${launch.details}"
+        holder.view.launchMissionTitle.text = "Mission: ${launch.mission_name}"
+        holder.view.launchYear.text = "Launch year: ${launch.launch_year}"
+        holder.view.launchRocketName.text =
+            "Rocket: ${launch.rocket.rocket_name} (${launch.rocket.rocket_type})"
+        if (launch.details == null) {
+            holder.view.launchDetails.isVisible = false
+        } else {
+            holder.view.launchDetails.text = "Details: \n${launch.details}"
+            holder.view.launchDetails.isVisible = true
+
+        }
     }
 }
 

@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
         fetchJson()
 
         launchesRecyclerView.layoutManager = LinearLayoutManager(this)
-//        launchesRecyclerView.adapter = MainAdapter()
     }
 
     fun fetchJson() {
@@ -59,7 +58,7 @@ class Launches(
     val mission_name: String,
     val launch_year: Int,
     val rocket: Rocket,
-    val details: String
+    val details: String?
 )
 
 class Rocket(
