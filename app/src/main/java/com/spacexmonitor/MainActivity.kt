@@ -1,5 +1,6 @@
 package com.spacexmonitor
 
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,15 +55,19 @@ class MainActivity : AppCompatActivity() {
 class SpaceXFeed(val launches: List<Launches>)
 
 class Launches(
-    val flight_number: Int,
     val mission_name: String,
     val launch_year: Int,
     val rocket: Rocket,
-    val details: String?
+    val details: String?,
+    val links: Links
 )
 
 class Rocket(
     val rocket_name: String,
     val rocket_type: String
+)
+
+class Links(
+    val mission_patch: String
 )
 

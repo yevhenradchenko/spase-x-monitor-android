@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.launch_row.view.*
 
 class MainAdapter(val spaceXFeed: SpaceXFeed) : RecyclerView.Adapter<CustomViewHolder>() {
@@ -31,6 +32,12 @@ class MainAdapter(val spaceXFeed: SpaceXFeed) : RecyclerView.Adapter<CustomViewH
             holder.view.launchDetails.text = "Details: \n${launch.details}"
             holder.view.launchDetails.isVisible = true
 
+        }
+
+        if (launch.links.mission_patch == null) {
+            holder.view.launchLogo.setImageResource(R.drawable.space_x_logo)
+        } else {
+            Picasso.get().load(launch.links.mission_patch).into(holder.view.launchLogo)
         }
     }
 }
