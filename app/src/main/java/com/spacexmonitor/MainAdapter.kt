@@ -15,7 +15,7 @@ class MainAdapter(val spaceXFeed: SpaceXFeed) : RecyclerView.Adapter<CustomViewH
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
-        val layoutInflater = LayoutInflater.from(parent?.context)
+        val layoutInflater = LayoutInflater.from(parent.context)
         val cellForRow = layoutInflater.inflate(R.layout.launch_row, parent, false)
         return CustomViewHolder(cellForRow)
     }
@@ -26,6 +26,7 @@ class MainAdapter(val spaceXFeed: SpaceXFeed) : RecyclerView.Adapter<CustomViewH
         holder.view.launchYear.text = "Launch year: ${launch.launch_year}"
         holder.view.launchRocketName.text =
             "Rocket: ${launch.rocket.rocket_name} (${launch.rocket.rocket_type})"
+
         if (launch.details == null) {
             holder.view.launchDetails.isVisible = false
         } else {
@@ -39,6 +40,14 @@ class MainAdapter(val spaceXFeed: SpaceXFeed) : RecyclerView.Adapter<CustomViewH
         } else {
             Picasso.get().load(launch.links.mission_patch).into(holder.view.launchLogo)
         }
+
+        if (launch.links.flickr_images.isNullOrEmpty()) {
+            holder.view.launchImage.setImageResource(R.drawable.space_x_logo)
+        } else {
+            Picasso.get().load(launch.links.flickr_images[0]).into(holder.view.launchImage)
+        }
+
+
     }
 }
 

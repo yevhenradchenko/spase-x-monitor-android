@@ -68,6 +68,8 @@ class Rocket(
 )
 
 class Links(
-    val mission_patch: String
+    val mission_patch: String,
+    val flickr_images: List<String>
 )
+
 
