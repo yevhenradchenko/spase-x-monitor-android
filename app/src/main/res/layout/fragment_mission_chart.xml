@@ -5,9 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".MissionChartFragment">
 
-    <com.jjoe64.graphview.GraphView
-        android:layout_gravity="center"
+    <com.spacexmonitor.GraphView
         android:id="@+id/graph"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="200dp"/>
 
