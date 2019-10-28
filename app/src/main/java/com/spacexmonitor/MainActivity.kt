@@ -1,75 +1,57 @@
 package com.spacexmonitor
 
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import okhttp3.*
-import java.io.IOException
+import com.spacexmonitor.MissionChartFragment as MissionChartFragment
+import androidx.fragment.app.Fragment
 
 class MainActivity : AppCompatActivity() {
+
+    private val missionList: Fragment = MissionListFragment()
+    private val chartView: Fragment = MissionChartFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        fetchJson()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.container, missionList)
+                .commit()
+        }
 
-        launchesRecyclerView.layoutManager = LinearLayoutManager(this)
-    }
+        // This is my brilliant hack how to save parsed fragment state with RecyclerView
+        // Please don't touch it
+        supportFragmentManager.beginTransaction()
+            .add(R.id.container, chartView)
+            .hide(chartView)
+            .commit()
 
-    fun fetchJson() {
-        println("Attempt fetch Json")
+        bottomNavigationBar.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
 
-        val url = "https://api.spacexdata.com/v3/launches"
-        val client = OkHttpClient()
-        val request = Request.Builder().url(url).build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(call: Call, response: Response) {
-                val body = response.body?.string()
-                println(body)
-
-                val gson = GsonBuilder().create()
-
-                val listType = object : TypeToken<List<Launches>>() {}.type
-                val spaceXFeed = gson.fromJson<List<Launches>>(body, listType)
-
-                runOnUiThread {
-                    launchesRecyclerView.adapter = MainAdapter(SpaceXFeed(spaceXFeed))
+                R.id.launchesMenuItem -> {
+                    supportFragmentManager.beginTransaction()
+                        .hide(chartView)
+                        .show(missionList)
+                        .commit()
+                    return@setOnNavigationItemSelectedListener true
                 }
 
+                R.id.chartsMenuItem -> {
+                    supportFragmentManager.beginTransaction()
+                        .hide(missionList)
+                        .show(chartView)
+                        .commit()
+                    return@setOnNavigationItemSelectedListener true
+                }
             }
-
-            override fun onFailure(call: Call, e: IOException) {
-                println("Failed to execute request")
-            }
-        })
-
+            false
+        }
     }
 }
 
-class SpaceXFeed(val launches: List<Launches>)
 
-class Launches(
-    val mission_name: String,
-    val launch_year: Int,
-    val rocket: Rocket,
-    val details: String?,
-    val links: Links
-)
-
-class Rocket(
-    val rocket_name: String,
-    val rocket_type: String
-)
-
-class Links(
-    val mission_patch: String,
-    val flickr_images: List<String>
-)
 
 
