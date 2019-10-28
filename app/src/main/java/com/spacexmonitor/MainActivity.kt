@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
-        // This is my brilliant hack how to save parsed fragment state with RecyclerView
+        // This is my brilliant hack how to save parsed fragment state for RecyclerView
         // Please don't touch it
         supportFragmentManager.beginTransaction()
             .add(R.id.container, chartView)
