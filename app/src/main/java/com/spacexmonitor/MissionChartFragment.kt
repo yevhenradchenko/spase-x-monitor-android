@@ -18,16 +18,21 @@ class MissionChartFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
+        return inflater.inflate(R.layout.fragment_mission_chart, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         val firstChartEntity = ChartEntity(Color.WHITE, graph1)
         val secondChartEntity = ChartEntity(Color.YELLOW, graph2)
 
         val list = ArrayList<ChartEntity>()
         list.add(firstChartEntity)
         list.add(secondChartEntity)
-        graph?.legendArray = legendArr
-        graph?.setList(list)
+        graph.legendArray = legendArr
+        graph.setList(list)
 
-        return inflater.inflate(R.layout.fragment_mission_chart, container, false)
+        super.onViewCreated(view, savedInstanceState)
     }
 
     private val graph1 = floatArrayOf(113000f, 183000f, 188000f, 695000f, 324000f, 230000f, 188000f, 15000f, 126000f, 5000f, 33000f)
