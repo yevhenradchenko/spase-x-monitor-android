@@ -1,6 +1,7 @@
 package com.spacexmonitor
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,13 @@ import kotlinx.android.synthetic.main.fragment_mission_list.*
 import okhttp3.*
 import java.io.IOException
 
-class MissionListFragment : Fragment() {
+class MissionListFragment : Fragment(), MainAdapter.OnItemClickListener {
+
+    private val mainAdapter = MainAdapter(this)
+    override fun onItemClicked(position: Int) {
+        val launch = mainAdapter.getItemByPosition(position)
+        Log.d("launch",launch.toString())
+    }
 
     companion object {
         private val MISSION_LIST = "mission list"
@@ -26,13 +33,10 @@ class MissionListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        launchesRecyclerView.layoutManager = LinearLayoutManager(this.context)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
         fetchJson()
+        launchesRecyclerView.layoutManager = LinearLayoutManager(view.context)
+        launchesRecyclerView.adapter = mainAdapter
+
     }
 
     fun fetchJson() {
@@ -41,7 +45,6 @@ class MissionListFragment : Fragment() {
         val url = "https://api.spacexdata.com/v3/launches"
         val client = OkHttpClient()
         val request = Request.Builder().url(url).build()
-
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
@@ -49,11 +52,11 @@ class MissionListFragment : Fragment() {
 
                 val gson = GsonBuilder().create()
 
-                val listType = object : TypeToken<List<Launches>>() {}.type
-                val spaceXFeed = gson.fromJson<List<Launches>>(body, listType)
+                val listType = object : TypeToken<List<Launch>>() {}.type
+                val spaceXFeed = gson.fromJson<List<Launch>>(body, listType)
 
                 activity?.runOnUiThread {
-                    launchesRecyclerView.adapter = MainAdapter(SpaceXFeed(spaceXFeed))
+                    mainAdapter.setData(spaceXFeed)
                 }
             }
 
@@ -64,23 +67,3 @@ class MissionListFragment : Fragment() {
 
     }
 }
-
-class SpaceXFeed(val launches: List<Launches>)
-
-class Launches(
-    val mission_name: String,
-    val launch_year: Int,
-    val rocket: Rocket,
-    val details: String?,
-    val links: Links
-)
-
-class Rocket(
-    val rocket_name: String,
-    val rocket_type: String
-)
-
-class Links(
-    val mission_patch: String,
-    val flickr_images: List<String>
-)

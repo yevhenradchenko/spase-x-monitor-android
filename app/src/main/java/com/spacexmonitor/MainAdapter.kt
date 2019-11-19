@@ -8,48 +8,78 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.launch_row.view.*
 
-class MainAdapter(val spaceXFeed: SpaceXFeed) : RecyclerView.Adapter<CustomViewHolder>() {
+class MainAdapter(private val onItemClickListener: OnItemClickListener) :
+    RecyclerView.Adapter<MainAdapter.CustomViewHolder>() {
+
+    private val data = mutableListOf<Launch>()
+
+    fun setData(data: List<Launch>) {
+        this.data.clear()
+        this.data.addAll(data)
+        notifyDataSetChanged()
+    }
 
     override fun getItemCount(): Int {
-        return spaceXFeed.launches.count()
+        return data.count()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val cellForRow = layoutInflater.inflate(R.layout.launch_row, parent, false)
-        return CustomViewHolder(cellForRow)
+        return CustomViewHolder(cellForRow, onItemClickListener)
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        val launch = spaceXFeed.launches[position]
-        holder.view.launchMissionTitle.text = "Mission: ${launch.mission_name}"
-        holder.view.launchYear.text = "Launch year: ${launch.launch_year}"
-        holder.view.launchRocketName.text =
-            "Rocket: ${launch.rocket.rocket_name} (${launch.rocket.rocket_type})"
+        val launch = data[position]
+        holder.bind(launch)
+    }
 
-        if (launch.details == null) {
-            holder.view.launchDetails.isVisible = false
-        } else {
-            holder.view.launchDetails.text = "Details: \n${launch.details}"
-            holder.view.launchDetails.isVisible = true
+    fun getItemByPosition(position: Int) = data[position]
+
+    class CustomViewHolder(
+        view: View,
+        private val onItemClickListener: OnItemClickListener
+    ) :
+        RecyclerView.ViewHolder(view) {
+        init {
+            itemView.setOnClickListener(object :View.OnClickListener {
+                override fun onClick(p0: View?) {
+                    onItemClickListener.onItemClicked(adapterPosition)
+                }
+            })
         }
 
-        if (launch.links.mission_patch == null) {
-            holder.view.launchLogo.setImageResource(R.drawable.space_x_logo)
-        } else {
-            Picasso.get().load(launch.links.mission_patch).into(holder.view.launchLogo)
+        fun bind(launch: Launch) {
+            with(itemView) {
+                launchMissionTitle.text = "Mission: ${launch.mission_name}"
+                launchYear.text = "Launch year: ${launch.launch_year}"
+                launchRocketName.text =
+                    "Rocket: ${launch.rocket.rocket_name} (${launch.rocket.rocket_type})"
+
+                if (launch.details == null) {
+                    launchDetails.isVisible = false
+                } else {
+                    launchDetails.text = "Details: \n${launch.details}"
+                    launchDetails.isVisible = true
+                }
+
+                if (launch.links.mission_patch == null) {
+                    launchLogo.setImageResource(R.drawable.space_x_logo)
+                } else {
+                    Picasso.get().load(launch.links.mission_patch).into(launchLogo)
+                }
+
+                if (launch.links.flickr_images.isNullOrEmpty()) {
+                    launchImage.setImageResource(R.drawable.space_x_logo)
+                } else {
+                    Picasso.get().load(launch.links.flickr_images[0]).into(launchImage)
+                }
+            }
         }
+    }
 
-        if (launch.links.flickr_images.isNullOrEmpty()) {
-            holder.view.launchImage.setImageResource(R.drawable.space_x_logo)
-        } else {
-            Picasso.get().load(launch.links.flickr_images[0]).into(holder.view.launchImage)
-        }
-
-
+    interface OnItemClickListener {
+        fun onItemClicked(position: Int)
     }
 }
 
-class CustomViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-
-}
