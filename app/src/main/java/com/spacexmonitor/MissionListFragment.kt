@@ -18,7 +18,7 @@ class MissionListFragment : Fragment(), MainAdapter.OnItemClickListener {
     private val mainAdapter = MainAdapter(this)
     override fun onItemClicked(position: Int) {
         val launch = mainAdapter.getItemByPosition(position)
-        Log.d("launch",launch.toString())
+        Log.d("DATA",launch.toString())
     }
 
     companion object {
@@ -39,8 +39,8 @@ class MissionListFragment : Fragment(), MainAdapter.OnItemClickListener {
 
     }
 
-    fun fetchJson() {
-        println("Attempt fetch Json")
+    private fun fetchJson() {
+        println("Attempt fetch Json....")
 
         val url = "https://api.spacexdata.com/v3/launches"
         val client = OkHttpClient()
